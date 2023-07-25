@@ -1,0 +1,92 @@
+---
+
+#Configuring OSPF Interfaces
+
+#Permitting network inside OSPF configuration
+
+- hosts: R2
+  gather_facts: False
+  tasks:
+    - name: EIGRP into OSPF
+      cisco.ios.ios_config:
+        lines:
+          - redistribute eigrp 65000 subnets
+          - ipv6 unicast-routing
+        parents: router ospf 1
+
+- hosts: R3
+  gather_facts: False
+  tasks:
+    - name: BGP Into OSPF
+      cisco.ios.ios_config:
+        lines:
+          - redistribute bgp 65000 subnets
+          - ipv6 unicast-routing
+        parents: router ospf 1
+
+
+#Configuring OSPF Interfaces on routers
+
+- hosts: R2
+  gather_facts: False
+  tasks:
+    - name: Configuring OSPF Interface on R2 connecting to R3
+      cisco.ios.ios_ospf_interfaces:
+        config:
+          - name: GigabitEthernet0/2
+            address_family:
+              - afi: ipv6
+                process:
+                  id: 1
+                  area_id: 0
+                network:
+                  broadcast: true
+        state: merged
+
+- hosts: R3
+  gather_facts: False
+  tasks:
+    - name: Configuring OSPF Interface on R3 connecting to R2
+      cisco.ios.ios_ospf_interfaces:
+        config:
+          - name: GigabitEthernet0/0
+            address_family:
+              - afi: ipv6
+                process:
+                  id: 1
+                  area_id: 0
+                network:
+                  broadcast: true
+        state: merged
+
+- hosts: R2
+  gather_facts: False
+  tasks:
+    - name: Conf Lo0 
+      cisco.ios.ios_ospf_interfaces:
+        config:
+          - name: Loopback0
+            address_family:
+              - afi: ipv6
+                process:
+                  id: 1
+                  area_id: 0
+                network:
+                  broadcast: true
+        state: merged
+
+- hosts: R3
+  gather_facts: False
+  tasks:
+    - name: Conf Lo0
+      cisco.ios.ios_ospf_interfaces:
+        config:
+          - name: Loopback0
+            address_family:
+              - afi: ipv6
+                process:
+                  id: 1
+                  area_id: 0
+                network:
+                  broadcast: true
+        state: merged

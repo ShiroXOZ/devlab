@@ -1,0 +1,25 @@
+---
+
+#Runs all playbooks in sequential order.
+
+- name: Execute router_interfaces playbook
+  import_playbook: tasks/router_interfaces.yml
+
+- name: Execute ipv6_interface playbook
+  import_playbook: tasks/ipv6_interface.yml
+
+- name: Execute ospf_interface playbook
+  import_playbook: tasks/ospf_interface.yml
+
+# - name: Execute ospfv2 playbook
+#   import_playbook: tasks/OSPFv2.yml
+
+# - name: Execute ospfv3 playbook
+#   import_playbook: tasks/OSPFv3.yml
+
+# - name: Execute eigrp playbook
+#   import_playbook: tasks/eigrp.yml
+
+# - name: Execute bgp playbook
+#   import_playbook: tasks/bgp.yml
+

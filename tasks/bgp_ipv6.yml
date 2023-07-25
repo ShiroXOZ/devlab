@@ -1,0 +1,33 @@
+---
+
+# Configuring IPv6 for BGP
+
+- hosts: R3
+  gather_facts: False
+  tasks:
+    - name: Configuring IPv6 for BGP on R3
+      cisco.ios.ios_bgp_address_family:
+        config:
+          as_number: 65000
+          address_family:
+            - afi: ipv6
+              safi: unicast
+              neighbors:
+                - neighbor_address: 2001:db8:feed:77::1
+                  remote_as: 65100
+        state: replaced
+
+- hosts: R4
+  gather_facts: False
+  tasks:
+    - name: Configuring IPv6 for BGP on R4
+      cisco.ios.ios_bgp_address_family:
+        config:
+          as_number: 65100
+          address_family:
+            - afi: ipv6
+              safi: multicast
+              neighbors:
+                - neighbor_address: 2001:db8:feed:77::2
+                  remote_as: 65000
+        state: replaced
