@@ -2,6 +2,9 @@
 
 #Hosts file contains the IP address for the routers on the network
 #The format is in YML.
+#Anisble connection would handle commands using command line. The network system would be ios which contains cisco modules.
+#Providing the configuration with admin permisions and providing the user access when connecting through SSH.
+
 routers:
   hosts:
     R1:
@@ -22,6 +25,11 @@ routers:
     ansible_action_warnings: False
     ansible_become_method: enable
     ansible_become_password: "{{password}}"
+
+
+
+
+
 
 
 
