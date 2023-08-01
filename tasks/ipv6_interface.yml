@@ -1,0 +1,81 @@
+---
+
+# Assigning IPv6 Addresses to interfaces
+# Assigning IPv6 link-local addresses to interfaces
+
+- hosts: R1
+  gather_facts: False
+  tasks:
+    - name: Link-Local for R1 (To Dev Machine)
+      cisco.ios.ios_config:
+        lines:
+          - ipv6 address FE80::1 link-local
+          - ipv6 unicast-routing
+        parents: interface GigabitEthernet0/0
+
+    - name: Assigning IPV6 Address to Gig0/1
+      cisco.ios.ios_config:
+        lines:
+          - ipv6 address FE80::1 link-local
+          - ipv6 address 2001:db8:cafe:2::1/64
+          - ipv6 unicast-routing
+        parents: interface GigabitEthernet0/1
+
+
+
+
+- hosts: R2
+  gather_facts: False
+  tasks:
+    - name: IPV6 address and Link-Local for R2 (To R1)
+      cisco.ios.ios_config:
+        lines:
+          - ipv6 address 2001:db8:cafe:2::2/64
+          - ipv6 address FE80::2 link-local
+          - ipv6 unicast-routing
+        parents: interface GigabitEthernet0/0
+
+
+    - name: Assigning IPV6 Address to Gig0/2
+      cisco.ios.ios_config:
+        lines:
+          - ipv6 address 2001:db8:cafe:4::1/64
+          - ipv6 address FE80::2 link-local
+          - ipv6 unicast-routing
+        parents: interface GigabitEthernet0/2
+
+
+
+
+- hosts: R3
+  gather_facts: False
+  tasks:
+    - name: IPV6 address and Link-Local for R3 (To R2)
+      cisco.ios.ios_config:
+        lines:
+          - ipv6 address 2001:db8:cafe:4::2/64
+          - ipv6 address FE80::3 link-local
+          - ipv6 unicast-routing
+        parents: interface GigabitEthernet0/0
+
+
+    - name: Assigning IPV6 Address to Gig0/1
+      cisco.ios.ios_config:
+        lines:
+          - ipv6 address 2001:db8:feed:77::1/64
+          - ipv6 address FE80::3 link-local
+          - ipv6 unicast-routing
+        parents: interface GigabitEthernet0/1
+
+
+
+- hosts: R4
+  gather_facts: False
+  tasks:
+    - name: Link-Local for R4 (To R3)
+      cisco.ios.ios_config:
+        lines:
+          - ipv6 address 2001:db8:feed:77::2/64
+          - ipv6 address FE80::4 link-local
+          - ipv6 unicast-routing
+        parents: interface GigabitEthernet0/0
