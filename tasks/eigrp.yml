@@ -1,0 +1,26 @@
+---
+
+#Configuring EIGRP on R1 and R2
+
+- hosts: R1
+  gather_facts: False
+  tasks:
+    - name: EIGRP Configuration for R1
+      cisco.ios.ios_config:
+        lines:
+          - network 192.168.2.0 0.0.0.3
+          - network 192.168.50.0 0.0.0.255
+          - passive-interface loopback0
+        parents: router eigrp 65000
+
+- hosts: R2
+  gather_facts: False
+  tasks:
+    - name: EIGRP Configuration for R2 with OSPF redistribution
+      cisco.ios.ios_config:
+        lines:
+          - redistribute ospf 1
+          - passive-interface loopback0
+          - network 192.168.2.0 0.0.0.3
+          - network 192.168.4.0 0.0.0.3
+        parents: router eigrp 65000
