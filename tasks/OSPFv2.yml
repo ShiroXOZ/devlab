@@ -1,0 +1,41 @@
+---
+
+#Configuring OSPFv2 for R2 and R3
+
+- hosts: R2
+  gather_facts: False
+  tasks:
+    - name: Configuring OSPFv2 for R2
+      cisco.ios.ios_ospfv2:
+        config:
+          processes:
+            - process_id: 1
+              network:
+                - address: 192.168.2.0
+                  wildcard_bits: 0.0.0.3
+                  area: 0
+                - address: 192.168.3.0
+                  wildcard_bits: 0.0.0.255
+                  area: 0
+                - address: 192.168.4.0
+                  wildcard_bits: 0.0.0.3
+                  area: 0
+        state: replaced
+
+
+- hosts: R3
+  gather_facts: False
+  tasks:
+    - name: Configuring OSPFv2 for R3
+      cisco.ios.ios_ospfv2:
+        config:
+          processes:
+            - process_id: 1
+              network:
+                - address: 192.168.4.0
+                  wildcard_bits: 0.0.0.3
+                  area: 0
+                - address: 192.168.5.0
+                  wildcard_bits: 0.0.0.255
+                  area: 0
+        state: replaced
