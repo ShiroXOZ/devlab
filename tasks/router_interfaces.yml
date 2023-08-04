@@ -54,7 +54,7 @@
       config:
       - name: Loopback0
         ipv4:
-        - address: 192.168.5.1/24
+        - address: 192.168.32.1/24
         ipv6:
         - address: 2001:db8:cafe:5::1/64
         - link_local: true
